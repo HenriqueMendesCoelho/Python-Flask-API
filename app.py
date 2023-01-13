@@ -1,3 +1,5 @@
+import os
+
 from flask import Flask
 from flask_restful import Api
 
@@ -8,7 +10,7 @@ app.register_blueprint(user_bp)
 app.config['SQLALCHEMY_DATABASE_URI'] = '{db}://{u}:{p}@{ur}:{pr}/{n}'.format(
     db='postgresql',
     u='postgres',
-    p='8u3T7&HQ$5o^x##',
+    p=os.environ.get('DB_PASS'),
     ur='localhost',
     pr='5432',
     n='python_test'
