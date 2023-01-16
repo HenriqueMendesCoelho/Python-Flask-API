@@ -22,10 +22,6 @@ class GenericRepository:
         return None
 
     def save_and_flush(self, entity):
-        if (type(self.entity) != type(entity)):
-            raise Exception(
-                "Entity to save, needs to be the same type of the repository")
-
         db.session.add(entity)
         db.session.commit()
 
