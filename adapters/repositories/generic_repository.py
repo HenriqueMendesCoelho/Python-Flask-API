@@ -1,5 +1,4 @@
 from adapters.sql_alchemy import db
-from domain.user import UserModel
 
 
 class GenericRepository:
@@ -8,29 +7,33 @@ class GenericRepository:
         self.entity = entity
 
     def find_by_id(self, id):
-        user = db.session.query(self.entity).filter_by(id=id).first()
+        entity = db.session.query(self.entity).filter_by(id=id).first()
 
-        if user:
-            return user
+        if entity:
+            return entity
         return None
-
-    def save_and_flush(self, user: UserModel):
-        db.session.add(user)
-        db.session.commit()
 
     def list(self):
-        users = db.session.query(self.entity).all()
+        entitys = db.session.query(self.entity).all()
 
-        if len(users) > 0:
-            return users
+        if len(entitys) > 0:
+            return entitys
 
         return None
 
-    def delete_by_id(self, id):
-        user = db.session.query(self.entity).filter_by(id=id).first()
+    def save_and_flush(self, entity):
+        if (type(self.entity) != type(entity)):
+            raise Exception(
+                "Entity to save, needs to be the same type of the repository")
 
-        if not user:
+        db.session.add(entity)
+        db.session.commit()
+
+    def delete_by_id(self, id):
+        entity = db.session.query(self.entity).filter_by(id=id).first()
+
+        if not entity:
             return
 
-        db.session.delete(user)
+        db.session.delete(entity)
         db.session.commit()
