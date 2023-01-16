@@ -1,6 +1,4 @@
-from flask import jsonify
-
-from sql_alchemy import db
+from adapters.sql_alchemy import db
 
 
 class UserModel(db.Model):
@@ -18,18 +16,9 @@ class UserModel(db.Model):
         self.password = password
 
     def json(self):
-        return jsonify(id=self.id, name=self.name,
-                       email=self.email, password=self.password)
-
-    @classmethod
-    def find_user_by_id(cls, id):
-        user = cls.query.filter_by(id=id).first()
-
-        if user:
-            return user
-
-        return None
-
-    def save_user(self):
-        db.session.add(self)
-        db.session.commit()
+        return {
+            "id": self.id,
+            "name": self.name,
+            "email": self.email,
+            "password": self.password
+        }
