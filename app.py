@@ -3,10 +3,12 @@ import os
 from flask import Flask
 from flask_restful import Api
 
+from adapters.handlers.error_handling import handler
 from controllers.user_controller import user_bp
 
 app = Flask(__name__)
 app.register_blueprint(user_bp)
+app.register_blueprint(handler)
 app.config['SQLALCHEMY_DATABASE_URI'] = '{db}://{u}:{p}@{ur}:{pr}/{n}'.format(
     db='postgresql',
     u='postgres',
@@ -37,4 +39,4 @@ def teste():
 if __name__ == '__main__':
     from adapters.sql_alchemy import db
     db.init_app(app)
-    app.run(debug=True)
+    app.run(debug=False)
