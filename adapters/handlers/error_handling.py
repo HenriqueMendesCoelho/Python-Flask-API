@@ -1,15 +1,17 @@
 import time
 
-from flask import Blueprint
+from flask import Blueprint, jsonify, make_response
+from jsonschema import ValidationError
 
 handler = Blueprint('errors', __name__)
 
 
-@handler.app_errorhandler(404)
+@handler.app_errorhandler(400)
 def handle_404(err):
-    return {"code": 404,
-            "message": err.description,
-            "timestamp": time.time()}, 404
+    if isinstance(err.description, ValidationError):
+        original_error = err.description
+        return make_response(jsonify({'error': original_error.message}), 400)
+    return err
 
 
 @handler.app_errorhandler(500)

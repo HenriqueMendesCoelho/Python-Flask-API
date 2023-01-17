@@ -1,4 +1,5 @@
 from flask import Blueprint, jsonify, request
+from flask_expects_json import expects_json
 
 from adapters.repositories.user_repository import UserRepository
 from domain.user import UserModel
@@ -30,6 +31,15 @@ def list_users():
 
 
 @ user_bp.route('/user',  methods=['POST'])
+@expects_json({
+    'type': 'object',
+    'properties': {
+        'name': {'type': 'string'},
+        'email': {'type': 'string'},
+        'password': {'type': 'string'}
+    },
+    'required': ['name', 'email', 'password']
+})
 def create_user():
     body = request.json
     body['id'] = None
