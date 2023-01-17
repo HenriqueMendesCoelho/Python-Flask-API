@@ -3,6 +3,8 @@ from adapters.sql_alchemy import db
 
 class GenericRepository:
 
+    entity: object = NotImplemented
+
     def __init__(self, entity: object):
         self.entity = entity
 
